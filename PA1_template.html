@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>PA1_template.md</title>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>PA1_template.md</h1>
+
+<p>This is my R markdown file for Peer Assessment 1.</p>
+
+<p>Here we are going to load some data and clean it where appropriate.</p>
+
+<p>&#39;&#39;&#39;{r}
+install.packages(&ldquo;curl&rdquo;)
+library(&ldquo;curl&rdquo;)</p>
+
+<p>temp &lt;- tempfile()
+download.file(&ldquo;<a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip%22,temp">https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip&rdquo;,temp</a>)
+data &lt;- read.csv(unz(temp, &ldquo;activity.csv&rdquo;))
+unlink(temp)</p>
+
+<p>&#39;&#39;&#39;</p>
+
+<p>What is the mean total number of steps taken per day? You can ignore missing values for this part.
+Here we will calculate the total number of steps taken per day, plot the total number of steps on a histogram, and calculate and report the mean and median of the total number of steps taken per day.</p>
+
+<p>&#39;&#39;&#39;{r}
+install.packages(&ldquo;ggplot2&rdquo;)
+library(&ldquo;ggplot2&rdquo;)</p>
+
+<p>steps.byday &lt;- aggregate(steps~date,data=data,sum)</p>
+
+<p>total_steps &lt;- sum(steps.byday$steps,na.rm=TRUE)
+print(paste(&ldquo;The total number of steps taken per day is&rdquo;,total_steps))</p>
+
+<p>ggplot(steps.byday,aes(x=steps)) + geom_histogram(binwidth=1000,colour=&ldquo;black&rdquo;,fill=&ldquo;white&rdquo;)</p>
+
+<p>mean_steps &lt;- mean(steps.byday$steps,na.rm=TRUE)
+print(paste(&ldquo;The mean number of steps taken per day is&rdquo;,mean_steps))
+median_steps &lt;- median(steps.byday$steps,na.rm=TRUE)
+print(paste(&ldquo;The median number of steps taken per day is&rdquo;,median_steps))
+&#39;&#39;&#39;</p>
+
+<p>What is the average daily activity pattern?
+Here we will make a time series plot of the 5-minute intervale and the average number of steps taken, averaged across all days. We will also report which 5-minute interval contains the maximum number of steps.</p>
+
+<p>&#39;&#39;&#39;{r}
+average.steps &lt;- aggregate(steps~interval,data=data,mean)
+ggplot(data=average.steps, aes(x=interval, y=steps, group=1)) + geom_line(colour=&ldquo;red&rdquo;,size=1)</p>
+
+<p>max.steps &lt;- max(average.steps$steps,na.rm=TRUE)
+max.interval &lt;- average.steps[which(average.steps$steps==max.steps),1]
+print(paste(&ldquo;The 5-minute interval that contains the maximum number of steps is&rdquo;,max.interval))
+&#39;&#39;&#39;</p>
+
+<p>Inputing missing values.
+Here we will calculate and report the total number of missing values in the data set. Missing values will be filled in with the average number of steps taken on that given day. If all values for that day are missing, values will be filled with 0. And we will make a histogram of the total number of steps taken each day and calculate and report the mean and median total number of steps taken each day.</p>
+
+<p>&#39;&#39;&#39;{r}
+install.packages(&ldquo;ggplot2&rdquo;)
+library(&ldquo;ggplot2&rdquo;)</p>
+
+<p>total.missing &lt;- sum(is.na(data$steps))</p>
+
+<p>date &lt;- unique(data$date)
+data_temp &lt;- NULL
+data2 &lt;- NULL</p>
+
+<p>for (d in date){
+    data.date &lt;- data[which(data$date==d),]
+    row.count &lt;- nrow(data.date) </p>
+
+<pre><code>for (i in 1:row.count){
+
+  if(is.na(data.date[i,1])==TRUE){
+      data.date[i,1] &lt;- mean(data.date$steps,na.rm=TRUE)
+      if(is.nan(data.date[i,1])){
+      data.date[i,1] &lt;- 0
+  }
+
+}
+</code></pre>
+
+<p>}<br/>
+  data_temp &lt;- data.date
+  data2 &lt;- rbind(data2, data_temp)
+}</p>
+
+<p>steps.byday2 &lt;- aggregate(steps~date,data=data2,sum)</p>
+
+<p>total_steps2 &lt;- sum(steps.byday2$steps,na.rm=TRUE)
+print(paste(&ldquo;The total number of steps taken per day is&rdquo;,total_steps2))</p>
+
+<p>ggplot(steps.byday2,aes(x=steps)) + geom_histogram(binwidth=1000,colour=&ldquo;black&rdquo;,fill=&ldquo;white&rdquo;)</p>
+
+<p>mean_steps2 &lt;- mean(steps.byday2$steps,na.rm=TRUE)
+print(paste(&ldquo;The mean number of steps taken per day is&rdquo;,mean_steps2))
+median_steps2 &lt;- median(steps.byday2$steps,na.rm=TRUE)
+print(paste(&ldquo;The median number of steps taken per day is&rdquo;,median_steps2))
+&#39;&#39;&#39;</p>
+
+<p>Are there differences in activity patterns between weekdays and weekends?
+Here we will create a new factor variable in the dataset with two levels - &ldquo;weekday&rdquo; and &ldquo;weekend&rdquo; indicating whether a given date is a weekday or a weekend day. We will also make a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days oor weekend days.</p>
+
+<p>&#39;&#39;&#39;{r}
+day.data &lt;- NULL
+data2$day &lt;- weekdays(as.Date(data2$date))
+day &lt;- unique(data2$day)</p>
+
+<p>for(d in day){
+  day_sub &lt;- data2[which(data2$day==d),]
+    if(d==&ldquo;Saturday&rdquo;){
+      day_sub$daylevel &lt;- &ldquo;weekend&rdquo;
+    } else if(d==&ldquo;Sunday&rdquo;) {
+      day_sub$daylevel &lt;- &ldquo;weekend&rdquo;
+    } else {
+      day_sub$daylevel &lt;- &ldquo;weekday&rdquo;
+    }
+  day.data &lt;- rbind(day.data,day_sub)
+}</p>
+
+<p>day.steps &lt;- aggregate(steps~interval+daylevel,data=day.data,sum)
+weekend &lt;- day.steps[which(day.steps$daylevel==&ldquo;weekend&rdquo;),]
+weekday &lt;- day.steps[which(day.steps$daylevel==&ldquo;weekday&rdquo;),]</p>
+
+<p>par(mfrow=c(2,1))
+plot(weekend$interval,weekend$steps,type=&ldquo;l&rdquo;,xlab=&ldquo;Interval&rdquo;,ylab=&ldquo;Number of Steps&rdquo;,main=&ldquo;weekend&rdquo;)
+plot(weekday$interval,weekday$steps,type=&ldquo;l&rdquo;,xlab=&ldquo;Interval&rdquo;,ylab=&ldquo;Number of steps&rdquo;,main=&ldquo;weekday&rdquo;)
+&#39;&#39;&#39;</p>
+
+</body>
+
+</html>
