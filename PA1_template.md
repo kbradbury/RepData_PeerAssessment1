@@ -38,11 +38,7 @@ print(paste("The total number of steps taken per day is",total_steps))
 
 Plot the total number of steps in a histogram.
 
-
-```
-## png 
-##   2
-```
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 Calculate the mean number of steps.
 
@@ -69,11 +65,7 @@ What is the average daily activity pattern?
 Here we will make a time series plot of the 5-minute intervale and the average number of steps taken, averaged across all days. We will also report which 5-minute interval contains the maximum number of steps.
 
 
-
-```
-## png 
-##   2
-```
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 ```
 ## [1] "The 5-minute interval that contains the maximum number of steps is 835"
@@ -88,10 +80,7 @@ Here we will calculate and report the total number of missing values in the data
 ## [1] "The total number of steps taken per day is 570608"
 ```
 
-```
-## png 
-##   2
-```
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
 
 ```
 ## [1] "The mean number of steps taken per day is 9354.22950819672"
@@ -105,8 +94,9 @@ Are there differences in activity patterns between weekdays and weekends?
 Here we will create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or a weekend day. We will also make a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days oor weekend days.
 
 
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
 ```
-## png 
-##   2
+## null device 
+##           1
 ```
