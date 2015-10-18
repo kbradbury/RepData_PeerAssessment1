@@ -1,9 +1,11 @@
 ---
 title: "PA_Assignment1"
-author: "Kimberly Bradbury"
-date: "Sunday, October 18, 2015"
-output: html_document
+output:
+  html_document:
+    keep_md: true
 ---
+
+
 
 This is my R markdown file for Peer Assessment 1.
 
@@ -31,9 +33,9 @@ print(paste("The total number of steps taken per day is",total_steps))
 Plot the total number of steps in a histogram.
 
 ```{r, echo=FALSE}
-
+png(filename="histogram1.png")
 ggplot(steps.byday,aes(x=steps)) + geom_histogram(binwidth=1000,colour="black",fill="white")
-
+dev.off()
 ```
 
 Calculate the mean number of steps.
@@ -52,7 +54,9 @@ Here we will make a time series plot of the 5-minute intervale and the average n
 ```{r, echo=FALSE}
 average.steps <- aggregate(steps~interval,data=data,mean)
 
+png(filename="plot1.png")
 ggplot(data=average.steps, aes(x=interval, y=steps, group=1)) + geom_line(colour="red",size=1)
+dev.off()
 
 max.steps <- max(average.steps$steps,na.rm=TRUE)
 max.interval <- average.steps[which(average.steps$steps==max.steps),1]
@@ -97,7 +101,9 @@ steps.byday2 <- aggregate(steps~date,data=data2,sum)
 total_steps2 <- sum(steps.byday2$steps,na.rm=TRUE)
 print(paste("The total number of steps taken per day is",total_steps2))
 
+png(filename="histogram2.png")
 ggplot(steps.byday2,aes(x=steps)) + geom_histogram(binwidth=1000,colour="black",fill="white")
+dev.off()
 
 mean_steps2 <- mean(steps.byday2$steps,na.rm=TRUE)
 print(paste("The mean number of steps taken per day is",mean_steps2))
@@ -130,9 +136,10 @@ day.steps <- aggregate(steps~interval+daylevel,data=day.data,sum)
 weekend <- day.steps[which(day.steps$daylevel=="weekend"),]
 weekday <- day.steps[which(day.steps$daylevel=="weekday"),]
 
-
+png(filename="plot2.png")
 par(mfrow=c(2,1))
 plot(weekend$interval,weekend$steps,type="l",xlab="Interval",ylab="Number of Steps",main="weekend")
 plot(weekday$interval,weekday$steps,type="l",xlab="Interval",ylab="Number of steps",main="weekday")
+dev.off()
 
 ```
