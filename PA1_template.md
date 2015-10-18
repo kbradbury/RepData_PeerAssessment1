@@ -1,4 +1,5 @@
 PA1_template.md
+Author: Kim Bradbury
 ===============
 
 This is my R markdown file for Peer Assessment 1.
