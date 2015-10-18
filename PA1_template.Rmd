@@ -2,7 +2,7 @@
 title: "PA_Assignment1"
 author: "Kimberly Bradbury"
 date: "Sunday, October 18, 2015"
-output: pdf_document
+output: html_document
 ---
 
 This is my R markdown file for Peer Assessment 1.
@@ -13,7 +13,6 @@ Here we are going to load some data and clean it where appropriate.
 ```{r}
 FilePath <- "F:/Reproducible Research/Peer Assessment 1/RepData_PeerAssessment1/repdata-data-activity/"
 data <- read.csv(paste(FilePath,"activity.csv",sep=""))
-unlink(temp)
 ```
 
 What is the mean total number of steps taken per day? You can ignore missing values for this part.
